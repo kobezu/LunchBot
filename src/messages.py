@@ -17,12 +17,12 @@ class Message:
 
 #welcome message
 def info(welcome: bool) -> Message: 
-    txt_fin = ("Hei, olen Ristin Killan Lounasbotti. Järjestän joka kuukausi arvonnan - toisella nimellä lounasloton - johon osallistumalla voit voittaa lounasseuraa!\n\n" +
+    txt_fin = ("Hei, olen Ristin Killan Lounasbotti. Järjestän joka kuukausi lounasloton, johon osallistumalla voitat lounasseuraa!\n\n" +
                 "Arvontaan voit liittyä mukaan lounasloton ollessa aktiivinen - ilmoitan tästä aina viestillä. " +
                 "Liityttyäsi, arvontapäivän tullessa arvon sinulle muista osallistuneista parin, jonka kanssa sovitte keskenään ajan ja paikan yhteiselle lounaalle. " +
                 "Näin pääset ehkä tutustumaan toiseen kiltalaiseen paremmin!")
     txt_eng = ("Hello, I'm the Lunchbot of the Guild of Cross. " +
-                "Every month, I organize a draw - also known as lunch lottery - where by participating, you can win a lunch companion!\n\n" +
+                "Every month, I organize a lunch lottery where, by participating, you'll win a lunch companion!\n\n" +
                 "You can participate the draw while the lunch lottery is active - I'll notify you about this via message. " +
                 "After you join, when the draw day comes, I'll draw you a pair from other participants, and then together you can arrange a time and place for lunch. " +
                 "This way, you might get to know another guild member better!")
@@ -53,26 +53,26 @@ def commands(is_admin: bool) -> Message:
                '/cancel - cancel your lottery partipication')
     list_admin = ('\n\nAdmin commands:\n/schedule_lottery [start day] [result day] - schedule monthly lottery with given start and result day\n' +
                        '/pause_lottery - pause monthly scheduled lunch lotteries\n' +
-                       '/start_lottery [confirmation] - run lunch lottery result immediately')
+                       '/start_lottery - run lunch lottery result immediately')
     msg = Message(list_fin + list_admin, list_eng + list_admin) if is_admin else Message(list_fin, list_eng)
     return msg
 
 #join command message
-JOIN: tuple[Message, Message, Message, Message] = (Message("Olet nyt mukana arvonnassa!", "You are now part of the draw!"),
+JOIN: "tuple[Message, Message, Message, Message]" = (Message("Olet nyt mukana arvonnassa!", "You are now part of the draw!"),
                                           Message("Et ole vielä kertonut mieltymyksiäsi. Käytä komentoa /mieltymykset tehdäksesi sen.",
                                                   "You haven't told your preferences yet. Use command /preferences to do so."),
                                           Message("Olet jo mukana arvonnassa.", "You are already part of the draw."),
                                           Message("Lounaslotto ei ole tällä hetkellä aktiivinen.", "Lunch lottery is not currently active."))
 
 #cancel command message                           
-CANCEL: tuple[Message, Message] = (Message("Olet perunut ilmoittautumisen arvontaan.", "You have canceled your partipication to the draw."),
+CANCEL: "tuple[Message, Message]" = (Message("Olet perunut ilmoittautumisen arvontaan.", "You have canceled your partipication to the draw."),
                                    Message("Et ole ilmoittautunut arvontaan.", "You haven't partipicated in the draw."))
 
 #bot language question
 BOT_LANGUAGE = Message("Puhunko minä (botti) suomea vai englantia?", "Do I (bot) speak Finnish or English?")
 
 #lunch language question and answers
-LUNCH_LANGUAGE: tuple[Message, Message, Message, Message] = (Message("Mitä kieltä haluat puhua lounaalla. Suomea, englantia vai ei väliä?", 
+LUNCH_LANGUAGE: "tuple[Message, Message, Message, Message]" = (Message("Mitä kieltä haluat puhua lounaalla. Suomea, englantia vai ei väliä?", 
                             "What language you want to speak during lunch. Finnish, English or no preference?"),
                             Message("Selvä, puhut suomea lounaalla.", "Alright, you speak Finnish at the lunch."),
                             Message("Selvä, puhut englantia lounaalla.", "Alright, you speak English at the lunch."),
@@ -99,7 +99,7 @@ NO_PARTNER = Message("Valitettavasti jäit tällä kertaa ilman lounasseuraa... 
                         "Unfortunately you didn't get a lunch partner this time... but fortunately, new draw will be held soon!")
 
 #helper function to return string containing time until event 
-def time_str(time: tuple[int, int, int], finnish: bool) -> str:
+def time_str(time: "tuple[int, int, int]", finnish: bool) -> str:
     def build_str(num: int, word: str, letter: str) -> str:
         if num == 1:
             return f"{num} {word}"
@@ -111,12 +111,12 @@ def time_str(time: tuple[int, int, int], finnish: bool) -> str:
         return f"{build_str(time[0], 'day', 's')}, {build_str(time[1], 'hour', 's')} and {build_str(time[2], 'minute', 's')}"
 
 #lottery active message
-def lottery_active(time: tuple[int, int, int]) -> Message:
+def lottery_active(time: "tuple[int, int, int]") -> Message:
     return Message(f"Lounaslotto on aktiivinen. Osallistuneita tällä hetkellä ({user.joined_count()}). Arvontaan jäljellä {time_str(time, True)}.", 
                     f"Lunch lottery is active. Participants currently ({user.joined_count()}). Time until draw: {time_str(time, False)}.")
 
 #lottery not active message
-def lottery_not_active(time: tuple[int, int, int]) -> Message:
+def lottery_not_active(time: "tuple[int, int, int]") -> Message:
     return Message(f"Lounaslotto ei ole aktiivinen. Seuraavan alkuun on {time_str(time, True)}.", 
                     f"Lunch lottery is not active. Time until next one: {time_str(time, False)}.")
 
@@ -140,7 +140,7 @@ def lottery_result(partner_1: User, partner_2: User | None =None) -> Message:
 
 #MESSAGES FOR ADMINS
 #lottery scheduled message
-def lottery_scheduled(days: tuple[int, int] | None=None) -> Message:
+def lottery_scheduled(days: "tuple[int, int] | None"=None) -> Message:
     if days is not None: txt = f"Monthly lottery scheduled succesfully. Start day: {days[0]}, and result day: {days[1]}."
     else: txt = ("Lottery scheduling failed. Days must be numbers between 1 and 28, " +
                 "and the result day must be greater than the start day. Valid command example: \"/schedule_lottery 1 8\".")
@@ -150,6 +150,9 @@ def lottery_scheduled(days: tuple[int, int] | None=None) -> Message:
 def lottery_paused(paused: bool) -> Message:
     txt = "Monthly lunch lottery has now been paused." if paused else "Monthly lunch lottery has already been paused."
     return Message(txt, txt)
+
+PAUSE_LOTTERY_FAILED = Message("Write \"/pause_lottery confirm\" if you are sure that you want to pause monthly scheduled lotteries.",
+                            "Write \"/pause_lottery confirm\" if you are sure that you want to pause monthly scheduled lotteries.")
 
 #start lottery failed message
 START_LOTTERY_FAILED = Message("Write \"/start_lottery confirm\" if you are sure that you want to run lottery result immediately.",

@@ -55,15 +55,18 @@ class User:
         logger.info(self.name, f"has set lunch language to {lunch_language.name}")
 
     def is_admin(self) -> bool:
-        with open('files/admins.txt', 'r') as file:
-            ids = [line.strip() for line in file]
-            return (str(self.ID) in ids)
+        try:
+            with open('files/admins.txt', 'r') as file:
+                ids = [line.strip() for line in file]
+                return (str(self.ID) in ids)
+        except FileNotFoundError:
+            return False
 
 #filepath for users file
 USERS_FP = "files/users.json"
 
 #users that are subscribed to the bot
-users: dict[int, User] = {}
+users: "dict[int, User]" = {}
 
 #get user from given update
 def get(update: Update) -> User:

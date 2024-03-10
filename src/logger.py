@@ -1,7 +1,8 @@
 import logging
 
 LOG_FP = 'files/bot.log'
-PRINT_LOGS = False
+#set true if you want logs printed
+PRINT_LOGS = True
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

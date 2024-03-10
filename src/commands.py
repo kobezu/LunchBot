@@ -77,18 +77,30 @@ async def schedule_lottery(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await update.message.reply_text(messages.NOT_COMMAND.get(_user))
 
+#check admin command confirmation
+def confirmation(args: "list[str] | None") -> bool:
+    if args is not None:
+        if (len(args) == 1):
+            if (args[0] == "confirm"): return True
+    return False
+
 #command to pause monthly lotteries
 async def pause_lottery(update: Update, context: ContextTypes.DEFAULT_TYPE):
     _user = user.get(update)
     if _user.is_admin():
-        jobs = context.application.job_queue.jobs()
-        jobs_n = len(jobs)
-        for job in jobs: job.schedule_removal()
-        if jobs_n > 0:
-            lottery.set_scheduled(False)
-            msg = messages.lottery_paused(True)
-        else: msg = messages.lottery_paused(False)
-        await update.message.reply_text(msg.get(_user))
+        if not confirmation(context.args): 
+            await update.message.reply_text(messages.PAUSE_LOTTERY_FAILED.get(_user))
+        else:
+            jobs = context.application.job_queue.jobs()
+            jobs_n = len(jobs)
+            for job in jobs: job.schedule_removal()
+            #check if lottery is currently scheduled
+            if jobs_n > 0:
+                lottery.set_scheduled(False)
+                for _user in user.users: _user.set_joined(False, log=False)
+                msg = messages.lottery_paused(True)
+            else: msg = messages.lottery_paused(False)
+            await update.message.reply_text(msg.get(_user))
     else:
         await update.message.reply_text(messages.NOT_COMMAND.get(_user))
 
@@ -96,12 +108,9 @@ async def pause_lottery(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def start_lottery(update: Update, context: ContextTypes.DEFAULT_TYPE):
     _user = user.get(update)
     if _user.is_admin():
-        start_failed = True
-        if context.args is not None:
-            if (len(context.args) == 1):
-                if (context.args[0] == "confirm"):
-                    start_failed = False
-                    await callbacks.lottery_result(context)
-        if start_failed: await update.message.reply_text(messages.START_LOTTERY_FAILED.get(_user))
+        if not confirmation(context.args):
+            await update.message.reply_text(messages.START_LOTTERY_FAILED.get(_user))
+        else:
+            await callbacks.lottery_result(context)
     else:
         await update.message.reply_text(messages.NOT_COMMAND.get(_user))
