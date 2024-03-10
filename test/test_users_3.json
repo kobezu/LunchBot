@@ -1,0 +1,37 @@
+{
+    "0": {
+        "name": "@Pekka",
+        "configured": true,
+        "joined": true,
+        "bot": "FIN",
+        "lunch": "FIN"
+    },
+    "1": {
+        "name": "@Tuomo",
+        "configured": true,
+        "joined": true,
+        "bot": "ENG",
+        "lunch": "FIN"
+    },
+    "2": {
+        "name": "@Jari",
+        "configured": true,
+        "joined": true,
+        "bot": "ENG",
+        "lunch": "FIN"
+    },
+    "3": {
+        "name": "@Maija",
+        "configured": true,
+        "joined": true,
+        "bot": "FIN",
+        "lunch": "BOTH"
+    },
+    "4": {
+        "name": "@Anna",
+        "configured": true,
+        "joined": true,
+        "bot": "FIN",
+        "lunch": "BOTH"
+    }
+}
