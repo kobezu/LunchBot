@@ -97,7 +97,7 @@ async def pause_lottery(update: Update, context: ContextTypes.DEFAULT_TYPE):
             #check if lottery is currently scheduled
             if jobs_n > 0:
                 lottery.set_scheduled(False)
-                for _user in user.users: _user.set_joined(False, log=False)
+                for u in user.users.values(): u.set_joined(False, log=False)
                 msg = messages.lottery_paused(True)
             else: msg = messages.lottery_paused(False)
             await update.message.reply_text(msg.get(_user))
