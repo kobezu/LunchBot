@@ -2,6 +2,7 @@ from enum import Enum
 from telegram import Update
 import json
 import logger
+import os
 
 class State(Enum):
     START = 0
@@ -56,14 +57,14 @@ class User:
 
     def is_admin(self) -> bool:
         try:
-            with open('files/admins.txt', 'r') as file:
+            with open(os.path.join(os.path.dirname(__file__), '..', 'files/admins.txt'), 'r') as file:
                 ids = [line.strip() for line in file]
                 return (str(self.ID) in ids)
         except FileNotFoundError:
             return False
 
 #filepath for users file
-USERS_FP = "files/users.json"
+USERS_FP = os.path.join(os.path.dirname(__file__), '..', 'files/users.json')
 
 #users that are subscribed to the bot
 users: "dict[int, User]" = {}

@@ -3,12 +3,13 @@ from telegram.ext import Application, MessageHandler, filters
 import handlers
 import user
 import logger
+import os
 
 #main program
 def main():
     logger.info(None, 'Starting bot...')
     try:
-        app = Application.builder().token(open("files/token.txt", "r").readline()).build()
+        app = Application.builder().token(open(os.path.join(os.path.dirname(__file__), '..', 'files/token.txt'), "r").readline()).build()
     except FileNotFoundError:
         logger.error("FileNotFoundError: Create 'token.txt' file into the 'files' folder. Write the bot token in the first line.")
     except telegram.error.InvalidToken:

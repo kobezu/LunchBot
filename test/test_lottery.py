@@ -8,18 +8,18 @@ from user import Language
 def users_path(n: int):
     return f"test/test_users_{n}.json"
 
-def valid_sizes(groups: list[list[user.User]]) -> bool:
-    return all((len(group) == 2) | (len(group) == 3) for group in groups)
+def valid_sizes(groups: "list[list[user.User]]") -> bool:
+    return all((len(group) == 2) or (len(group) == 3) for group in groups)
 
-def valid_languages(groups: list[list[user.User]]) -> bool:
+def valid_languages(groups: "list[list[user.User]]") -> bool:
     for group in groups:
-        if not all(((_user.lunch_language == Language.FIN) | (_user.lunch_language == Language.BOTH)) for _user in group):
-            if not all(((_user.lunch_language == Language.ENG) | (_user.lunch_language == Language.BOTH)) for _user in group):
+        if not all(((_user.lunch_language == Language.FIN) or (_user.lunch_language == Language.BOTH)) for _user in group):
+            if not all(((_user.lunch_language == Language.ENG) or (_user.lunch_language == Language.BOTH)) for _user in group):
                 return False
     return True
 
 def print_groups(result: LotteryResult, test: int):
-    def print_group(group: list[user.User]):
+    def print_group(group: "list[user.User]"):
         line = ""
         for _user in group:
             line += f"{_user.name}: {_user.lunch_language.name}  "

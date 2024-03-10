@@ -124,7 +124,7 @@ LOTTERY_ON_PAUSE = Message("Kuukausittaiset lounaslotot ovat tällä hetkellä t
                            "Currently monthly lunch lotteries are on a pause. You can ask from bot admin when the lunch lottery will start again.")
 
 #lunch lottery result message
-def lottery_result(partner_1: User, partner_2: User | None =None) -> Message:
+def lottery_result(partner_1: User, partner_2: "User | None" =None) -> Message:
     #check if there is second partner
     if isinstance(partner_2, User):
         return Message(f"Lounaslottoparisi ovat... {partner_1.name} ja {partner_2.name}! " + 

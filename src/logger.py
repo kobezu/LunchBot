@@ -1,6 +1,8 @@
 import logging
+import os
 
-LOG_FP = 'files/bot.log'
+
+LOG_FP = os.path.join(os.path.dirname(__file__), '..', 'files/bot.log')
 #set true if you want logs printed
 PRINT_LOGS = True
 
@@ -15,7 +17,7 @@ if PRINT_LOGS:
     stream_handler.setFormatter
     logger.addHandler(stream_handler)
 
-def info(username: str | None, text: str):
+def info(username: "str | None", text: str):
     if username is not None: logger.info(f"{username} {text}")
     else: logger.info(f"{text}")
 

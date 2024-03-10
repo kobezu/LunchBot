@@ -7,11 +7,11 @@ import lottery
 import logger
 
 class Keyboard:
-    def __init__(self, keyboard_fin: list[list[str]], keyboard_eng: list[list[str]]):
+    def __init__(self, keyboard_fin: "list[list[str]]", keyboard_eng: "list[list[str]]"):
         self.FIN = keyboard_fin
         self.ENG = keyboard_eng
 
-    def get(self, _user: User) -> list[list[str]]:
+    def get(self, _user: User) -> "list[list[str]]":
         if _user.bot_language == Language.FIN:
             return self.FIN
         else:

@@ -67,7 +67,7 @@ async def lottery_result(context: ContextTypes.DEFAULT_TYPE):
         await send_message(context, _user.ID, messages.NO_PARTNER.get(_user))
         _user.set_joined(False, log=False)
         
-    def group_str(group: list[user.User]) -> str:
+    def group_str(group: "list[user.User]") -> str:
         return f"[{', '.join(map(lambda u: u.name, group))}]"
     
     logger.info(None, f"""

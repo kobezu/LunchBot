@@ -16,7 +16,7 @@ class LotteryResult:
         fin = [user for user in users.values() if (user.lunch_language == Language.FIN) & user.joined]
         both = [user for user in users.values() if (user.lunch_language == Language.BOTH) & user.joined]
 
-        def form_group(group: list[User]):
+        def form_group(group: "list[User]"):
             #add group to groups
             self.groups.append(group.copy())
             #remove users from pools

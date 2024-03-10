@@ -16,7 +16,7 @@ def set_scheduled(set_running: bool):
     logger.info(None, log_txt)
 
 #change start and result days
-def change_days(days: tuple[int, int]) -> bool:
+def change_days(days: "tuple[int, int]") -> bool:
     new_start = days[0]
     new_result = days[1]
     def valid_day(day: int) -> bool:
@@ -48,7 +48,7 @@ def is_active() -> bool:
         return False
 
 #return days, hours and minutes until lottery start or lottery result
-def time_until_event() -> tuple[int, int, int]:
+def time_until_event() -> "tuple[int, int, int]":
     now = datetime.datetime.now(tz=TZ_OFFSET)
     day = result_day if is_active() else start_day
     event = now.replace(day=day, hour=LOTTERY_TIME.hour, minute=LOTTERY_TIME.minute)
