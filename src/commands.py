@@ -13,7 +13,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 #command to get list of commands
 async def commands(update: Update, context: ContextTypes.DEFAULT_TYPE):
     _user = user.get(update)
-    await update.message.reply_text(messages.commands(_user.is_admin()).get(_user))
+    msg = messages.COMMANDS if not _user.is_admin() else messages.ADMIN_COMMANDS
+    await update.message.reply_text(msg.get(_user))
 
 #command to set preferences
 async def preferences(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -21,7 +22,7 @@ async def preferences(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 #command to get information about the lunch bot
 async def info(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(messages.info(False).get(user.get(update)))
+    await update.message.reply_text(messages.lottery_noti().get(user.get(update)))
 
 #command to get information about lottery
 async def lottery_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -64,16 +65,11 @@ async def schedule_lottery(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if (len(context.args) == 2):
                 days = (int(context.args[0]), int(context.args[1]))
                 if lottery.change_days(days):
-                    job_q = context.application.job_queue
-                    #remove old jobs
-                    for job in job_q.jobs(): job.schedule_removal()
-                    #schedule new jobs
-                    job_q.run_monthly(callbacks.lottery_notification, when=lottery.LOTTERY_TIME, day=lottery.start_day)
-                    job_q.run_monthly(callbacks.lottery_reminder, when=lottery.LOTTERY_TIME, day=(lottery.result_day-1))
-                    job_q.run_monthly(callbacks.lottery_result, when=lottery.LOTTERY_TIME, day=lottery.result_day)
-                    lottery.set_scheduled(True)
+                    lottery.schedule(True, context.application)
+                    if lottery.is_active:
+                        await callbacks.lottery_notification(context)
                     msg = messages.lottery_scheduled(days)
-        await update.message.reply_text(msg.get(_user))    
+        await update.message.reply_text(msg.get(_user))
     else:
         await update.message.reply_text(messages.NOT_COMMAND.get(_user))
 
@@ -91,12 +87,9 @@ async def pause_lottery(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if not confirmation(context.args): 
             await update.message.reply_text(messages.PAUSE_LOTTERY_FAILED.get(_user))
         else:
-            jobs = context.application.job_queue.jobs()
-            jobs_n = len(jobs)
-            for job in jobs: job.schedule_removal()
             #check if lottery is currently scheduled
-            if jobs_n > 0:
-                lottery.set_scheduled(False)
+            if lottery.is_scheduled:
+                lottery.schedule(False, context.application)
                 for u in user.users.values(): u.set_joined(False, log=False)
                 msg = messages.lottery_paused(True)
             else: msg = messages.lottery_paused(False)

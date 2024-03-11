@@ -2,14 +2,15 @@ import telegram
 from telegram.ext import Application, MessageHandler, filters
 import handlers
 import user
+import lottery
 import logger
-import os
+import filehandler
 
 #main program
 def main():
     logger.info(None, 'Starting bot...')
     try:
-        app = Application.builder().token(open(os.path.join(os.path.dirname(__file__), '..', 'files/token.txt'), "r").readline()).build()
+        app = Application.builder().token(open(filehandler.TOKEN_FP, "r").readline()).build()
     except FileNotFoundError:
         logger.error("FileNotFoundError: Create 'token.txt' file into the 'files' folder. Write the bot token in the first line.")
     except telegram.error.InvalidToken:
@@ -17,11 +18,13 @@ def main():
 
     #add handlers
     app.add_error_handler(handlers.error_handler)
-    for cmd_handler in handlers.COMMAND_HANDLERS: app.add_handler(cmd_handler)
+    for command_handler in handlers.COMMAND_HANDLERS: app.add_handler(command_handler)
     app.add_handler(MessageHandler(filters.TEXT, handlers.message_handler))
 
-    #load users from file
-    user.load_users(user.USERS_FP)
+    #load users
+    user.load_users()
+    #load lottery schedule
+    lottery.load_lottery(app)
 
     logger.info(None, 'Polling...')
     app.run_polling(poll_interval=2)

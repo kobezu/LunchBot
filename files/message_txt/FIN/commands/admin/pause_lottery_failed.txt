@@ -1,0 +1,1 @@
+Write "/pause_lottery confirm" if you are sure that you want to pause monthly scheduled lotteries.

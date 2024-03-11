@@ -1,15 +1,13 @@
 import logging
-import os
+import filehandler
 
-
-LOG_FP = os.path.join(os.path.dirname(__file__), '..', 'files/bot.log')
 #set true if you want logs printed
 PRINT_LOGS = True
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(levelname)s: %(message)s', "%Y-%m-%d %H:%M:%S")
-file_handler = logging.FileHandler(LOG_FP)
+file_handler = logging.FileHandler(filehandler.LOG_FP)
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 if PRINT_LOGS:
@@ -28,4 +26,4 @@ def exception(text: str):
     logger.exception(text)
 
 def last_log() -> str:
-    return next(reversed(list(open(LOG_FP))))
+    return next(reversed(list(open(filehandler.LOG_FP))))

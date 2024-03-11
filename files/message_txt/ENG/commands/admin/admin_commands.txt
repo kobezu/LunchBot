@@ -1,0 +1,10 @@
+List of commands:
+\n/preferences - set bot and lunch language
+\n/info - information about the lunch bot
+\n/lottery - status of the lunch lottery
+\n/join - join the lottery
+\n/cancel - cancel your lottery partipication
+\n\nAdmin commands:
+\n/schedule_lottery [start day] [result day] - schedule monthly lottery with given start and result day
+\n/pause_lottery - pause monthly scheduled lunch lotteries
+\n/start_lottery - run lunch lottery result immediately

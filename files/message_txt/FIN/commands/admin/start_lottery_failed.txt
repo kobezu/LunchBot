@@ -1,0 +1,1 @@
+Write "/start_lottery confirm" if you are sure that you want to run lottery result immediately.

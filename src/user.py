@@ -2,7 +2,10 @@ from enum import Enum
 from telegram import Update
 import json
 import logger
-import os
+import filehandler
+
+#users that are subscribed to the bot
+users: "dict[int, User]" = {}
 
 class State(Enum):
     START = 0
@@ -28,17 +31,17 @@ class User:
     def update_name(self, new_name: str):
         old_name = self.name
         self.name = new_name
-        save_users(USERS_FP)
+        save_users()
         logger.info(self.name, f"{old_name} has changed username to '{new_name}'")
 
     def set_configured(self, configured: bool):
         self.configured = configured
-        save_users(USERS_FP)
+        save_users()
         logger.info(self.name, "has been congigured")
     
     def set_joined(self, joined: bool, log=True):
         self.joined = joined
-        save_users(USERS_FP)
+        save_users()
         if log:
             if joined:
                 logger.info(self.name, "has joined to lottery")
@@ -47,27 +50,21 @@ class User:
 
     def set_bot(self, bot_language: Language):
         self.bot_language = bot_language
-        save_users(USERS_FP)
+        save_users()
         logger.info(self.name, f"has set bot language to {bot_language.name}")
 
     def set_lunch(self, lunch_language: Language):
         self.lunch_language = lunch_language
-        save_users(USERS_FP)
+        save_users()
         logger.info(self.name, f"has set lunch language to {lunch_language.name}")
 
     def is_admin(self) -> bool:
         try:
-            with open(os.path.join(os.path.dirname(__file__), '..', 'files/admins.txt'), 'r') as file:
+            with open(filehandler.ADMINS_FP, 'r') as file:
                 ids = [line.strip() for line in file]
                 return (str(self.ID) in ids)
         except FileNotFoundError:
             return False
-
-#filepath for users file
-USERS_FP = os.path.join(os.path.dirname(__file__), '..', 'files/users.json')
-
-#users that are subscribed to the bot
-users: "dict[int, User]" = {}
 
 #get user from given update
 def get(update: Update) -> User:
@@ -76,7 +73,7 @@ def get(update: Update) -> User:
         return users[update_user.id]
     else:
         users[update_user.id] = User(update_user.id, update_user.name)
-        save_users(USERS_FP)
+        save_users()
         logger.info(update_user.name, "has been created")
         return users[update_user.id]
 
@@ -100,19 +97,15 @@ def user_serialized(user: User):
     "lunch": user.lunch_language.name}
 
 #save users to json-file
-def save_users(path: str):
+def save_users():
     data = {id: user_serialized(user) for id, user in users.items()}
-    js = json.dumps(data, indent=2) 
-    fp = open(path, "w")
-    fp.write(js)
-    fp.close()
+    open(filehandler.USERS_FP, "w").write(json.dumps(data, indent=2) )
     
 #load user data from json-file
-def load_users(path: str):
+def load_users(test_fp: "str | None" =None):
     try:
-        fp = open(path, "r")
-        data = json.load(fp)
-        fp.close()
+        path = filehandler.USERS_FP if test_fp is None else test_fp
+        data = json.load(open(path, "r"))
         ids = data.keys()
         #for each saved user make user object and add it to users
         for id in ids:

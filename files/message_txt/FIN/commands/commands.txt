@@ -1,0 +1,6 @@
+Lista komennoista:
+\n/mieltymykset - määritä botin ja lounaan kieli
+\n/tietoa - tietoa lounasbotista
+\n/lotto - lounasloton tila
+\n/liity - liity mukaan lounaslottoon
+\n/peru - peru osallistumisesi lounaslottoon

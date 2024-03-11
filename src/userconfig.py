@@ -43,7 +43,7 @@ async def progress(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             #send welcome message to users not yet configured
             if not _user.configured:
-                await context.bot.send_message(_user.ID, messages.info(True).get(_user))
+                await context.bot.send_message(_user.ID, messages.WELCOME.get(_user))
             question = messages.LUNCH_LANGUAGE[0]
             keyboard = LUNCH_LANGUAGE_KB
             _user.state = State.Q2
