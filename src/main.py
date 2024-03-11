@@ -8,11 +8,10 @@ import filehandler
 
 #main program
 def main():
+    filehandler.create_files()
     logger.info(None, 'Starting bot...')
     try:
         app = Application.builder().token(open(filehandler.TOKEN_FP, "r").readline()).build()
-    except FileNotFoundError:
-        logger.error("FileNotFoundError: Create 'token.txt' file into the 'files' folder. Write the bot token in the first line.")
     except telegram.error.InvalidToken:
         logger.error("InvalidToken: Write your bot token in the first line of the 'token.txt' file.")
 

@@ -4,3 +4,5 @@ pyrightconfig.json
 bot.log
 token.txt
 admins.txt
+lottery.json
+users.json

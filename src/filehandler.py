@@ -10,6 +10,11 @@ TOKEN_FP = path_to_file('token.txt')
 ADMINS_FP = path_to_file('admins.txt')
 LOTTERY_FP = path_to_file('lottery.json')
 
+#create required files
+def create_files():
+    for fp in [USERS_FP, TOKEN_FP, ADMINS_FP, LOTTERY_FP]:
+        if not os.path.exists(fp): open(fp, 'w+')
+
 #return message text as string from given file
 def message_txt(file_name: str, language_fin: bool) -> str:
     folder_name = 'FIN' if language_fin else 'ENG'
