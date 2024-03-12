@@ -1,7 +1,6 @@
 .vscode
 __pycache__
 pyrightconfig.json
-bot.log
 token.txt
 admins.txt
 lottery.json

@@ -41,7 +41,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else: 
             await update.message.reply_text(messages.reply_not_valid(ans).get(_user))
 
-#handles callback querys for accepting users
+#handles callback queries for accepting users
 async def user_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     data = query.data

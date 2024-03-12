@@ -4,7 +4,7 @@ import os
 def path_to_file(file_name: str) -> str:
     return os.path.join(os.path.dirname(__file__), '..', 'files', file_name)
 
-LOG_FP = path_to_file('bot.log')
+LOG_FP = path_to_file('logs/bot.log')
 USERS_FP = path_to_file('users.json')
 TOKEN_FP = path_to_file('token.txt')
 ADMINS_FP = path_to_file('admins.txt')
@@ -22,7 +22,7 @@ def message_txt(file_name: str, language_fin: bool) -> str:
     lines = [line.strip().replace('\\n', '\n') for line in file]
     return ' '.join(lines)
 
-#check if user_id is in admins file
+#return list of user ids in admins file
 def admins_ids() -> "list[int]":
     with open(ADMINS_FP, 'r') as file:
         return [int(line.strip()) for line in file]
