@@ -6,7 +6,7 @@ from lottery_result import LotteryResult
 from user import Language
 
 def users_path(n: int):
-    return f"test/test_users_{n}.json"
+    return f"test/test_users/{n}.json"
 
 def valid_sizes(groups: "list[list[user.User]]") -> bool:
     return all((len(group) == 2) or (len(group) == 3) for group in groups)
