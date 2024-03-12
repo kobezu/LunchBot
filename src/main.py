@@ -1,18 +1,19 @@
-import telegram
+import filehandler
+filehandler.create_files()
+
+from telegram.error import InvalidToken
 from telegram.ext import Application
 import handlers
 import user
 import lottery
 import logger
-import filehandler
 
 #main program
 def main():
-    filehandler.create_files()
     logger.info(None, 'Starting bot...')
     try:
         app = Application.builder().token(open(filehandler.TOKEN_FP, "r").readline()).build()
-    except telegram.error.InvalidToken:
+    except InvalidToken:
         logger.exception("InvalidToken: Write your bot token in the first line of the 'token.txt' file.")
 
     #add handlers
