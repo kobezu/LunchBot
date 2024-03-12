@@ -1,14 +1,29 @@
-from telegram import Update
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import ContextTypes
 import user
 import userconfig
 import messages
 import lottery
 import callbacks
+import filehandler
+import logger
 
 #command to start bot
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await preferences(update, context)
+    u = update.effective_user
+    #check that user has not interacted with the bot before
+    if (u.id not in (list(user.pending.keys()) + list(user.blacklisted.keys()) + list(user.users.keys()))):
+        #check if user is admin
+        if id in filehandler.admins_ids(): 
+            user.add(u.id, u.name)
+            await preferences(update, context)
+        else:
+            user.set_pending(u.id, u.name)
+            await update.message.reply_text("An approval request has been send to the bot admin. Please wait until you are accepted.")
+            admin_id = filehandler.admins_ids()[0] 
+            kb = [[InlineKeyboardButton(text="Accept", callback_data=f"1{u.id}"), 
+                InlineKeyboardButton(text="Decline", callback_data=f"0{u.id}")]]
+            await context.bot.send_message(admin_id, f"User pending: {u.name}", reply_markup=InlineKeyboardMarkup(kb))
 
 #command to get list of commands
 async def commands(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -90,7 +105,7 @@ async def pause_lottery(update: Update, context: ContextTypes.DEFAULT_TYPE):
             #check if lottery is currently scheduled
             if lottery.is_scheduled:
                 lottery.schedule(False, context.application)
-                for u in user.users.values(): u.set_joined(False, log=False)
+                for u in user.joined_users(): u.set_joined(False, log=False)
                 msg = messages.lottery_paused(True)
             else: msg = messages.lottery_paused(False)
             await update.message.reply_text(msg.get(_user))
@@ -105,5 +120,13 @@ async def start_lottery(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(messages.START_LOTTERY_FAILED.get(_user))
         else:
             await callbacks.lottery_result(context)
+    else:
+        await update.message.reply_text(messages.NOT_COMMAND.get(_user))
+
+#command to get bot.log
+async def get_log(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    _user = user.get(update) 
+    if _user.is_admin():
+        await update.message.reply_document(filehandler.LOG_FP)
     else:
         await update.message.reply_text(messages.NOT_COMMAND.get(_user))

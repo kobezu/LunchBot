@@ -21,3 +21,8 @@ def message_txt(file_name: str, language_fin: bool) -> str:
     file = open(path_to_file(os.path.join(path_to_file('message_txt'), folder_name, file_name)), encoding="utf-8")
     lines = [line.strip().replace('\\n', '\n') for line in file]
     return ' '.join(lines)
+
+#check if user_id is in admins file
+def admins_ids() -> "list[int]":
+    with open(ADMINS_FP, 'r') as file:
+        return [int(line.strip()) for line in file]

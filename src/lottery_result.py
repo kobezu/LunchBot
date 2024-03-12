@@ -1,4 +1,5 @@
-from user import User, Language, users
+import user
+from user import User, Language
 import random
 
 #class for generating lottery result 
@@ -12,9 +13,10 @@ class LotteryResult:
 
     def generate_groups(self):
         #users filtered by language
-        eng = [user for user in users.values() if (user.lunch_language == Language.ENG) & user.joined]
-        fin = [user for user in users.values() if (user.lunch_language == Language.FIN) & user.joined]
-        both = [user for user in users.values() if (user.lunch_language == Language.BOTH) & user.joined]
+        joined = user.joined_users()
+        eng = [user for user in joined if user.lunch_language == Language.ENG]
+        fin = [user for user in joined if user.lunch_language == Language.FIN]
+        both = [user for user in joined if user.lunch_language == Language.BOTH]
 
         def form_group(group: "list[User]"):
             #add group to groups

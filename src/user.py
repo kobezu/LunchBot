@@ -4,8 +4,12 @@ import json
 import logger
 import filehandler
 
-#users that are subscribed to the bot
+#users that have been created
 users: "dict[int, User]" = {}
+#users waiting to be accepted
+pending: "dict[int, str]" = {}
+#blacklisted users
+blacklisted: "dict[int, str]" = {}
 
 class State(Enum):
     START = 0
@@ -59,48 +63,53 @@ class User:
         logger.info(self.name, f"has set lunch language to {lunch_language.name}")
 
     def is_admin(self) -> bool:
-        try:
-            with open(filehandler.ADMINS_FP, 'r') as file:
-                ids = [line.strip() for line in file]
-                return (str(self.ID) in ids)
-        except FileNotFoundError:
-            return False
+        return id in filehandler.admins_ids()
 
 #get user from given update
 def get(update: Update) -> User:
-    update_user = update.effective_user
-    if update_user.id in users:
-        return users[update_user.id]
-    else:
-        users[update_user.id] = User(update_user.id, update_user.name)
-        save_users()
-        logger.info(update_user.name, "has been created")
-        return users[update_user.id]
-
+    user = update.effective_user
+    id = user.id
+    try: return users[id]
+    except KeyError: raise InvalidUser()
+#add user to users
+def add(id: int, name: str):
+    users[id] = User(id, name)
+    remove_pending(id)
+    save_users()
+    logger.info(name, "has been created")
 #remove user from users
-def remove(user_id: int):
-    if user_id in users.keys():
-        removed_user = users.pop(user_id)
+def remove(id: int):
+    if id in users.keys():
+        removed_user = users.pop(id)
         logger.info(removed_user.name, "removed from users")
-
 #count joined users
-def joined_count() -> int:
-    return sum(1 for user in users.values() if user.joined)
+def joined_users() -> "list[User]":
+    return [user for user in users.values() if user.joined]
 
-#serialize user object into json-format
-def user_serialized(user: User):
-    return {
-    "name": user.name,
-    "configured": user.configured, 
-    "joined": user.joined, 
-    "bot": user.bot_language.name, 
-    "lunch": user.lunch_language.name}
+#set user waiting to be accepted
+def set_pending(id: int, name: str):
+    pending[id] = name
+    logger.info(name, "is pending")
+#remove user from waiting users
+def remove_pending(id: int):
+    if id in pending.keys(): pending.pop(id)
+#blacklist user
+def set_blacklisted(id: int, name: str):
+    remove(id)
+    remove_pending(id)
+    blacklisted[id] = name
+    logger.info(name, "is blacklisted")
+#remove user from blacklisted users
+def remove_blacklisted(id: int):
+    if id in blacklisted.keys(): blacklisted.pop(id)
 
 #save users to json-file
 def save_users():
+    def user_serialized(user: User):
+        return {"name": user.name, "configured": user.configured, "joined": user.joined, 
+                "bot": user.bot_language.name, "lunch": user.lunch_language.name}
     data = {id: user_serialized(user) for id, user in users.items()}
     open(filehandler.USERS_FP, "w").write(json.dumps(data, indent=2) )
-    
 #load user data from json-file
 def load_users(test_fp: "str | None" =None):
     try:
@@ -123,3 +132,7 @@ def load_users(test_fp: "str | None" =None):
         logger.error("KeyError: User data is corrupted")
     except json.decoder.JSONDecodeError:
         logger.error(f"JSONDecodeError: Tried to load users from '{path}' but the file was empty")
+
+#exception that is raised when invalid user is trying to access bot
+class InvalidUser(Exception):
+    pass

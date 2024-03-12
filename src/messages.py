@@ -3,7 +3,7 @@ from user import User, Language
 import lottery
 import filehandler
 
-#message class that ei
+#message class that reads message text from file, if file name is given, otherwise from the given text parameter
 class Message:
     def __init__(self, file_name: "str | None"=None, text: "tuple[str, str]" =('','')):
         self.FIN = filehandler.message_txt(file_name, True) if file_name is not None else text[0]
@@ -86,8 +86,9 @@ def time_str(time: "tuple[int, int, int]", finnish: bool) -> str:
 
 #lottery active message
 def lottery_active(time: "tuple[int, int, int]") -> Message:
-    return Message(text=(f"Lounaslotto on aktiivinen. Osallistuneita tällä hetkellä ({user.joined_count()}). Arvontaan on jäljellä {time_str(time, True)}.", 
-                    f"Lunch lottery is active. Participants currently ({user.joined_count()}). Time until draw: {time_str(time, False)}."))
+    count = len(user.joined_users())
+    return Message(text=(f"Lounaslotto on aktiivinen. Osallistuneita tällä hetkellä ({count}). Arvontaan on jäljellä {time_str(time, True)}.", 
+                    f"Lunch lottery is active. Participants currently ({count}). Time until draw: {time_str(time, False)}."))
 
 #lottery not active message
 def lottery_not_active(time: "tuple[int, int, int]") -> Message:

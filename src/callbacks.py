@@ -48,7 +48,7 @@ async def lottery_result(context: ContextTypes.DEFAULT_TYPE):
             logger.error(f"BadRequest: " + e.message)
             user.remove(_user.ID)
 
-    attendance = user.joined_count()
+    attendance = len(user.joined_users())
     result = LotteryResult()
     for group in result.groups:
         #groups size of two

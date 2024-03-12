@@ -8,3 +8,4 @@ List of commands:
 \n/schedule_lottery [start day] [result day] - schedule monthly lottery with given start and result day
 \n/pause_lottery - pause monthly scheduled lunch lotteries
 \n/start_lottery - run lunch lottery result immediately
+\n/get_log - get log file
