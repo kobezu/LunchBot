@@ -51,11 +51,11 @@ async def user_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
         name = user.pending[id]
         if accepted:
             user.add(id, name)
-            txt = name + " accepted."
-            await context.bot.send_message(id, "You have been accepted! Tell me now your /preferences.")
+            txt = name + " is accepted."
+            await context.bot.send_message(id, "You have been accepted! Now please tell me your /preferences.")
         else:
             user.set_blacklisted(id, name)
-            txt = name + " declined."
+            txt = name + " is blacklisted."
         await update.callback_query.edit_message_text(txt)
     
 #handle errors

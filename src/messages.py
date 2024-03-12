@@ -66,13 +66,13 @@ def lottery_result(partner_1: User, partner_2: "User | None" =None) -> Message:
         return Message(text=(f"Lounaslottoparisi ovat... {partner_1.name} ja {partner_2.name}! " + 
                        "Sopikaa yhdessä teille sopiva aika lounasta varten. Hyvää lounasta ja hedelmällisiä keskusteluja!", 
                        f"Your lunch lottery pairs are... {partner_1.name} and {partner_2.name}! " +
-                       "Agree on a time that suits both of you for lunch. Enjoy your lunch and fruitful conversations!"))
+                       "Agree on a lunch time that works for both of you. Enjoy your lunch and have fruitful conversations!"))
     #only one partner
     else:
         return Message(text=(f"Lounaslottoparisi on... {partner_1.name}! " +
                        "Sopikaa yhdessä teille sopiva aika lounasta varten. Hyvää lounasta ja hedelmällisiä keskusteluja!", 
                        f"Your lunch lottery pair is... {partner_1.name}! " +
-                       "Agree on a time that suits both of you for lunch. Enjoy your lunch and fruitful conversations!"))
+                       "Agree on a lunch time that suits you all. Enjoy your lunch and have fruitful conversations!"))
 
 #return string containing time until event 
 def time_str(time: "tuple[int, int, int]", finnish: bool) -> str:
@@ -88,12 +88,12 @@ def time_str(time: "tuple[int, int, int]", finnish: bool) -> str:
 def lottery_active(time: "tuple[int, int, int]") -> Message:
     count = len(user.joined_users())
     return Message(text=(f"Lounaslotto on aktiivinen. Osallistuneita tällä hetkellä ({count}). Arvontaan on jäljellä {time_str(time, True)}.", 
-                    f"Lunch lottery is active. Participants currently ({count}). Time until draw: {time_str(time, False)}."))
+                    f"Lunch lottery is active. Participants currently ({count}). Time until the draw: {time_str(time, False)}."))
 
 #lottery not active message
 def lottery_not_active(time: "tuple[int, int, int]") -> Message:
     return Message(text=(f"Lounaslotto ei ole aktiivinen. Seuraavan alkuun on {time_str(time, True)}.", 
-                    f"Lunch lottery is not active. Time until next one: {time_str(time, False)}."))
+                    f"Lunch lottery is not active. Time until the next one: {time_str(time, False)}."))
 
 LOTTERY_ON_PAUSE = Message('commands/lottery/lottery_on_pause.txt')
 
