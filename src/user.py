@@ -63,7 +63,7 @@ class User:
         logger.info(self.name, f"has set lunch language to {lunch_language.name}")
 
     def is_admin(self) -> bool:
-        return id in filehandler.admins_ids()
+        return (self.ID in filehandler.admins_ids())
 
 #get user from given update
 def get(update: Update) -> User:

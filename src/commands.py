@@ -14,7 +14,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     #check that user has not interacted with the bot before
     if (u.id not in (list(user.pending.keys()) + list(user.blacklisted.keys()) + list(user.users.keys()))):
         #check if user is admin
-        if id in filehandler.admins_ids(): 
+        if (u.id in filehandler.admins_ids()): 
             user.add(u.id, u.name)
             await preferences(update, context)
         else:
@@ -37,7 +37,7 @@ async def preferences(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 #command to get information about the lunch bot
 async def info(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(messages.lottery_noti().get(user.get(update)))
+    await update.message.reply_text(messages.INFO.get(user.get(update)))
 
 #command to get information about lottery
 async def lottery_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
