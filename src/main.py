@@ -10,7 +10,6 @@ import logger
 
 #main program
 def main():
-    filehandler.create_files()
     logger.info(None, 'Starting bot...')
     try:
         app = Application.builder().token(open(filehandler.TOKEN_FP, "r").readline()).build()
