@@ -38,6 +38,8 @@ class User:
         save_users()
         logger.info(self.name, f"{old_name} has changed username to '{new_name}'")
 
+    def set_state(self, state: State): self.state = state
+
     def set_configured(self, configured: bool):
         self.configured = configured
         save_users()

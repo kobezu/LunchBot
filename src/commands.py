@@ -6,24 +6,25 @@ import messages
 import lottery
 import callbacks
 import filehandler
-import logger
 
 #command to start bot
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     u = update.effective_user
-    #check that user has not interacted with the bot before
-    if (u.id not in (list(user.pending.keys()) + list(user.blacklisted.keys()) + list(user.users.keys()))):
+    #check that user is not in users
+    if (u.id not in user.users):
         #check if user is admin
         if (u.id in filehandler.admins_ids()): 
             user.add(u.id, u.name)
             await preferences(update, context)
-        else:
+        #check that user has not interacted with the bot before
+        elif (u.id not in user.blacklisted) & (u.id not in user.pending):
             user.set_pending(u.id, u.name)
             await update.message.reply_text("An approval request has been send to the bot admin. Please wait until you are accepted.")
             admin_id = filehandler.admins_ids()[0] 
             kb = [[InlineKeyboardButton(text="Accept", callback_data=f"1{u.id}"), 
                 InlineKeyboardButton(text="Decline", callback_data=f"0{u.id}")]]
             await context.bot.send_message(admin_id, f"User pending: {u.name}", reply_markup=InlineKeyboardMarkup(kb))
+    else: await preferences(update, context)
 
 #command to get list of commands
 async def commands(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -33,6 +34,7 @@ async def commands(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 #command to set preferences
 async def preferences(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user.get(update).set_state(user.State.START)
     await userconfig.progress(update, context)
 
 #command to get information about the lunch bot

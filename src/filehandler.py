@@ -12,8 +12,8 @@ LOTTERY_FP = path_to_file('lottery.json')
 
 #create required files
 def create_files():
-    logs_path = path_to_file('logs')
-    os.mkdir(logs_path)
+    logs_fp = path_to_file('logs')
+    if not os.path.exists(logs_fp): os.mkdir(logs_fp)
     for fp in [USERS_FP, TOKEN_FP, ADMINS_FP, LOTTERY_FP]:
         if not os.path.exists(fp): open(fp, 'w+')
 

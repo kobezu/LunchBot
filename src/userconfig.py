@@ -26,19 +26,22 @@ async def progress(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if _user.state == State.Q2:
         #user config completed
         if not _user.configured:
-            await context.bot.send_message(_user.ID, messages.CONFIGURED.get(_user))
-            _user.set_configured(True)
-            #send lunch lottery notification to user if active lottery
-            if lottery.is_active():
-                await context.bot.send_message(_user.ID, messages.lottery_noti().get(_user))
-                logger.info(None, f"Lottery notification has been sent to user {_user.name}")
-        _user.state = State.START
+            #check that user config did not fail
+            if (_user.bot_language is not Language.NONE) & (_user.lunch_language is not Language.NONE):
+                await context.bot.send_message(_user.ID, messages.CONFIGURED.get(_user))
+                _user.set_configured(True)
+                #send lunch lottery notification to user if active lottery
+                if lottery.is_active():
+                    await context.bot.send_message(_user.ID, messages.lottery_noti().get(_user))
+                    logger.info(None, f"Lottery notification has been sent to user {_user.name}")
+            else: await context.bot.send_message(_user.ID, messages.CONFIG_FAILED.get(_user))
+        _user.set_state(State.START)
     else:
         #bot language config
         if _user.state == State.START:
             question = messages.BOT_LANGUAGE
             keyboard = BOT_LANGUAGE_KB
-            _user.state = State.Q1
+            _user.set_state(State.Q1)
         #lunch language config
         else:
             #send welcome message to users not yet configured
@@ -46,6 +49,6 @@ async def progress(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await context.bot.send_message(_user.ID, messages.WELCOME.get(_user))
             question = messages.LUNCH_LANGUAGE[0]
             keyboard = LUNCH_LANGUAGE_KB
-            _user.state = State.Q2
+            _user.set_state(State.Q2)
         reply_markup = ReplyKeyboardMarkup(keyboard.get(_user), resize_keyboard=True, one_time_keyboard=True, input_field_placeholder=question.get(_user))
         await update.message.reply_text(question.get(_user), reply_markup=reply_markup)

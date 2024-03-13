@@ -48,14 +48,17 @@ async def user_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if data is not None:
         accepted = int(data[:1])
         id = int(data[1:])
-        name = user.pending[id]
+        try: name = user.pending[id]
+        except KeyError:
+            u = await context.bot.get_chat(id)
+            name = f"@{u.username}"
         if accepted:
             user.add(id, name)
-            txt = name + " is accepted."
+            txt = name + " has been accepted."
             await context.bot.send_message(id, "You have been accepted! Now please tell me your /preferences.")
         else:
             user.set_blacklisted(id, name)
-            txt = name + " is blacklisted."
+            txt = name + " has been declined."
         await update.callback_query.edit_message_text(txt)
     
 #handle errors

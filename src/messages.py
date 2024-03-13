@@ -23,6 +23,9 @@ BOT_LANGUAGE = Message('config/bot_language.txt')
 LUNCH_LANGUAGE = (Message('config/lunch_language/0.txt'), Message('config/lunch_language/1.txt'),
                 Message('config/lunch_language/2.txt'), Message('config/lunch_language/3.txt'))
 
+#config_failed
+CONFIG_FAILED = Message('config/config_failed.txt')
+
 #configured message
 CONFIGURED = Message('config/configured.txt')
 
@@ -49,9 +52,9 @@ def reply_not_valid(reply: str) -> Message:
 #lunch lottery notification
 def lottery_noti() -> Message: 
     return Message(text=("Lounaslotto on tulossa! Komennolla /tietoa saat lisätietoa ja komennolla /liity osallistut arvontaan. " + 
-                   f"Arvonta suoritetaan {lottery.result_day}. päivä. Onnea arvontaan!", 
-                    "The lunch lottery is coming! Use the command /info for more information and the command /join to join the lottery. " +
-                    f"The draw is held on the {lottery.result_day}. day. Good luck in the draw!"))
+                   f"Arvonta suoritetaan tämän kuun {lottery.result_day}. päivä. Onnea arvontaan!", 
+                    "The lunch lottery is coming! Use the command /info for more information and the command /join to enter the draw. " +
+                    f"The draw is held on the {lottery.result_day}. day of this month. Good luck in the draw!"))
 
 #lunch lottery reminder
 REMINDER = Message('lottery/reminder.txt')

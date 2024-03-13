@@ -38,12 +38,9 @@ async def lottery_result(context: ContextTypes.DEFAULT_TYPE):
     for _user in users.values():
         try:
             u = await context.bot.get_chat(_user.ID)
-            if u.username:
-                new_name = "@" + u.username
-                if not _user.name == new_name:
-                    _user.update_name(new_name)
-            else:
-                logger.error(f"[{_user.ID}] user doesn't have username")
+            new_name = f"@{u.username}"
+            if not _user.name == new_name:
+                _user.update_name(new_name)
         except telegram.error.BadRequest as e:
             logger.error(f"BadRequest: " + e.message)
             user.remove(_user.ID)
