@@ -83,7 +83,7 @@ async def schedule_lottery(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 days = (int(context.args[0]), int(context.args[1]))
                 if lottery.change_days(days):
                     lottery.schedule(True, context.application)
-                    if lottery.is_active:
+                    if lottery.is_active():
                         await callbacks.lottery_notification(context)
                     msg = messages.lottery_scheduled(days)
         await update.message.reply_text(msg.get(_user))
