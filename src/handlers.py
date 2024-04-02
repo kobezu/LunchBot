@@ -41,7 +41,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else: 
             await update.message.reply_text(messages.reply_not_valid(ans).get(_user))
 
-#handles callback queries for accepting users
+#handles approving users related callback queries
 async def user_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     data = query.data
@@ -55,7 +55,7 @@ async def user_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if accepted:
             user.add(id, name)
             txt = name + " has been accepted."
-            await context.bot.send_message(id, "You have been accepted! Now please tell me your /preferences.")
+            await context.bot.send_message(id, "You have been accepted! Now please tell your /preferences.")
         else:
             user.set_blacklisted(id, name)
             txt = name + " has been declined."

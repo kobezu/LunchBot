@@ -1,6 +1,6 @@
 I'm the Lunchbot of the Guild of the Cross. 
 Every month, I organize a lunch lottery
-where, by participating, you'll win a lunch companion!
+where, by participating, you'll win a lunch companion.
 After you join the draw, when the draw day comes, 
 I'll draw you a pair from other participants, 
 and then together you can arrange a time and place for a lunch.
