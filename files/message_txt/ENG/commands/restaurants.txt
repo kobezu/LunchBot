@@ -1,0 +1,11 @@
+Lunch restaurants with abbreviations:
+\nA - Alvari
+\nB - A Bloc
+\nD - Dipoli
+\nKV - Kipsari Väre
+\nSK - Studio Kipsari
+\nQ - Kvarkki
+\nT - T-talo
+\nTF - Täffä
+\nTS - TUAS
+\n\n/spin the restaurant wheel!

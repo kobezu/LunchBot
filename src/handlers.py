@@ -81,6 +81,8 @@ HANDLERS = (
     CommandHandler(["liity", "join"], commands.join),
     CommandHandler(["peru", "cancel"], commands.cancel),
     CommandHandler(["lotto", "lottery"], commands.lottery_cmd),
+    CommandHandler(["restaurants", "ravintolat"], commands.restaurants),
+    CommandHandler(["spin", "pyorita"], commands.spin),
     CommandHandler("schedule_lottery", commands.schedule_lottery),
     CommandHandler("pause_lottery", commands.pause_lottery),
     CommandHandler("start_lottery", commands.start_lottery),

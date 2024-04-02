@@ -45,6 +45,13 @@ JOIN = (Message('commands/join/0.txt'), Message('commands/join/1.txt'),
 #cancel command messages
 CANCEL = (Message('commands/cancel/0.txt'), Message('commands/cancel/1.txt'))
 
+#restaurants command message
+RESTAURANTS = Message('commands/restaurants.txt')
+
+#spin command message
+def spin(restaurant: str) -> Message:
+    return Message(text=(f"Ravintola on... {restaurant}!", f"The restaurant is... {restaurant}!"))
+
 #reply not valid message
 def reply_not_valid(reply: str) -> Message:
     return Message(text=(f'"{reply}" ei kelpaa vastaukseksi.', f'"{reply}" is not valid answer.'))

@@ -6,6 +6,7 @@ import messages
 import lottery
 import callbacks
 import filehandler
+import random
 
 #command to start bot
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -71,6 +72,17 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
         i = 0
     else: i = 1
     await update.message.reply_text(messages.CANCEL[i].get(_user))
+
+#command to get list of restaurants
+async def restaurants(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    _user = user.get(update)
+    await update.message.reply_text(messages.RESTAURANTS.get(_user))
+
+#command to get random restaurant
+async def spin(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    restaurants = ("A", "B", "D", "KV", "SK", "Q", "T", "TF", "TS")
+    _user = user.get(update)
+    await update.message.reply_text(messages.spin(random.choice(restaurants)).get(_user))
 
 #ADMIN COMMANDS:
 #command to schedule monthly lotteries

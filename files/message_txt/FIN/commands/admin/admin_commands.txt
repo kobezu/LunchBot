@@ -4,6 +4,7 @@ Lista komennoista:
 \n/lotto - lounasloton tila
 \n/liity - liity mukaan lounaslottoon
 \n/peru - peru osallistumisesi lounaslottoon
+\n/ravintolat - lista lounasravintoloista
 \n\nAdmin commands:
 \n/schedule_lottery [start day] [result day] - schedule monthly lottery with given start and result day
 \n/pause_lottery - pause monthly scheduled lunch lotteries

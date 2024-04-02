@@ -4,3 +4,4 @@ Lista komennoista:
 \n/lotto - lounasloton tila
 \n/liity - liity mukaan lounaslottoon
 \n/peru - peru osallistumisesi lounaslottoon
+\n/ravintolat - lista lounasravintoloista
